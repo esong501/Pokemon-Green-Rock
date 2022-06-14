@@ -185,6 +185,8 @@ static EWRAM_DATA struct PokemonSummaryScreenData
     bool8 unk40EF;
     s16 switchCounter; // Used for various switch statement cases that decompress/load graphics or pokemon data
     u8 unk_filler4[6];
+    // adding field for split icon
+    u8 splitIconSpriteId;
 } *sMonSummaryScreen = NULL;
 EWRAM_DATA u8 gLastViewedMonIndex = 0;
 static EWRAM_DATA u8 sMoveSlotToReplace = 0;

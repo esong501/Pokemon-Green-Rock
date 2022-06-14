@@ -68,7 +68,5 @@
 #define HOLD_EFFECT_METAL_POWDER   64
 #define HOLD_EFFECT_THICK_CLUB     65
 #define HOLD_EFFECT_STICK          66
-// defining a new hold effect to account for percent HP
-#define HOLD_EFFECT_RESTORE_PCT_HP 67
 
 #endif // GUARD_HOLD_EFFECTS_H

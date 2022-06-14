@@ -1053,12 +1053,7 @@ void Bike_HandleBumpySlopeJump(void)
 
 bool32 IsRunningDisallowed(u8 metatile)
 {
-    // we want to enable the player to run indoors
-    // right now, this if statement checks if the tile allows running and the map header
-    // which normally all indoor map headers restrict it
-    // so we'll change it to skip that check
-    // if (!gMapHeader.allowRunning || IsRunningDisallowedByMetatile(metatile) == TRUE)
-    if (IsRunningDisallowedByMetatile(metatile) == TRUE)
+    if (!gMapHeader.allowRunning || IsRunningDisallowedByMetatile(metatile) == TRUE)
         return TRUE;
     else
         return FALSE;

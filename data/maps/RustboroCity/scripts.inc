@@ -194,13 +194,6 @@ RustboroCity_EventScript_NinjaBoy::
 	msgbox RustboroCity_Text_CatchRarePokemonIfIGoToSchool, MSGBOX_SIGN
 	end
 
-RustboroCity_EventScript_Creator::
-	lock
-	faceplayer
-	msgbox RustboroCity_Text_Creator, MSGBOX_DEFAULT
-	release
-	end
-
 RustboroCity_EventScript_TunnelSign::
 	msgbox RustboroCity_Text_TunnelNearingCompletion, MSGBOX_SIGN
 	end
@@ -1304,9 +1297,3 @@ RustboroCity_Text_YouCanHave2On2Battle:
 	.string "they'll both challenge you.\p"
 	.string "Don't you think it'd be cool if you\n"
 	.string "could beat two TRAINERS by yourself?$"
-
-RustboroCity_Text_Creator:
-	.string "Hey! I'm the guy who made this hack.\n"
-	.string "Though, I can't seem to get it running\l"
-	.string "on my actual GBA. Hm...$"
-

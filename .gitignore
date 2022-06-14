@@ -20,7 +20,6 @@
 sound/**/*.bin
 sound/songs/midi/*.s
 tools/agbcc
-agbcc/
 *.map
 *.ld
 *.bat
@@ -39,5 +38,3 @@ porymap.project.cfg
 *.diff
 *.sym
 *.js
-*.zip
-

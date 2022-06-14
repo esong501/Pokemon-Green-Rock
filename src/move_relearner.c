@@ -24,8 +24,6 @@
 #include "task.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
-// we want to import party_menu.h to go back to the party screen
-#include "party_menu.h"
 
 /*
  * Move relearner state machine
@@ -674,16 +672,7 @@ static void DoMoveRelearnerMain(void)
         if (!gPaletteFade.active)
         {
             FreeMoveRelearnerResources();
-            if (FlagGet(FLAG_TEMP_1)){
-                SetMainCallback2(CB2_ReturnToPartyMenuFromSummaryScreen);
-            }
-            else{
-                // this line always brings us back to the overworld!
-                // we don't always want that so we add if else statements
-                // so that we go back to the overworld when we talk to
-                // the move relearner only!
-                SetMainCallback2(CB2_ReturnToField);
-            }
+            SetMainCallback2(CB2_ReturnToField);
         }
         break;
     case MENU_STATE_FADE_FROM_SUMMARY_SCREEN:

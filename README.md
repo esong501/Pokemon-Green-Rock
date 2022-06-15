@@ -17,6 +17,7 @@ Changelog:
 - physical/special split
     - corresponding icons in the summary screen
 - can forget HM moves!
+- Linking Cord from PLA!
 
 Moves: (Most have been changed to their Gen 7+ attributes)
 - Cut

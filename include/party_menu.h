@@ -89,5 +89,10 @@ void MoveDeleterForgetMove(void);
 void BufferMoveDeleterNicknameAndMove(void);
 void GetNumMovesSelectedMonHas(void);
 void MoveDeleterChooseMoveToForget(void);
+// normally when we exit the move relearner screen
+// it takes us back to the overworld because it expects
+// us to be talking to the move relearner NPC
+// this is to let us just go straight back to the party screen
+void CB2_ReturnToPartyMenuFromSummaryScreen(void);
 
 #endif // GUARD_PARTY_MENU_H

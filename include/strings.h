@@ -518,6 +518,10 @@ extern const u8 gText_SpDef[];
 extern const u8 gText_Speed[];
 extern const u8 gText_Dash[];
 extern const u8 gText_Plus[];
+// adding a string to implement changing nickname from party screen
+extern const u8 gText_Nickname[];
+// adding a string to implement changing moves from party screen
+extern const u8 gText_ChangeMoves[];
 
 //pokedex text
 extern const u8 gText_CryOf[];
@@ -1013,6 +1017,8 @@ extern const u8 gText_InBagVar1[];
 extern const u8 gText_Var1AndYouWantedVar2[];
 extern const u8 gText_HereYouGoThankYou[];
 extern const u8 gText_NoMoreRoomForThis[];
+// add a string to denote when you own an item you want to buy
+extern const u8 gText_YouAlreadyHaveThis[];
 extern const u8 gText_ThankYouIllSendItHome[];
 extern const u8 gText_ThanksIllSendItHome[];
 extern const u8 gText_SpaceForVar1Full[];

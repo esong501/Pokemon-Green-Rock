@@ -1,6 +1,10 @@
 # Pokemon-Green-Rock
 A modification of Pokemon Emerald built using [pret's disassembly][1] of the game.
 
+# Installation instructions:
+
+Use [FLIPS][2] to patch the .BPS file onto a clean Pokemon Emerald ROM (the option will appear as "Apply Patch"). From there, FLIPS will ask you for the clean unmodified ROM and THEN the patch (.BPS) file.
+
 Changelog:
 -----------------------------------------------------------------------------
 - dismounting after surfing now properly renders ground effects
@@ -39,5 +43,5 @@ Moves: (Most have been changed to their Gen 7+ attributes)
 - Rock Blast
     - Accuracy: 90 -> 100
 
-
 [1]: https://github.com/pret/pokeemerald    "pret/pokeemerald"
+[2]: https://www.smwcentral.net/?p=section&a=details&id=11474 "FLIPS"

@@ -18,6 +18,10 @@ Changelog:
     - corresponding icons in the summary screen
 - can forget HM moves!
 - Linking Cord from PLA!
+- Impossible Evos have been changed
+    - any items used for trading evos are now usable items like evolution stones
+    - also now available in the Lilicove Department Store
+- a new NPC in Slateport City now gives you a Scyther!
 
 Moves: (Most have been changed to their Gen 7+ attributes)
 - Cut

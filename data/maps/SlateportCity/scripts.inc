@@ -734,6 +734,70 @@ SlateportCity_EventScript_Man3::
 	msgbox SlateportCity_Text_WonderIfLighthouseStartlesPokemon, MSGBOX_NPC
 	end
 
+SlateportCity_EventScript_ScytherGuy::
+	lock
+	faceplayer
+	goto_if_set FLAG_RECEIVED_SCYTHER, SlateportCity_EventScript_HowIsScyther
+	msgbox SlateportCity_Text_ThanksPleaseTakePokemon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, SlateportCity_EventScript_ComeBackIfYouWant
+	goto SlateportCity_EventScript_ReceiveScyther
+	end
+
+SlateportCity_EventScript_ReceiveScyther::
+	setvar VAR_TEMP_1, SPECIES_SCYTHER
+	givemon SPECIES_SCYTHER, 15, ITEM_METAL_COAT
+	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PARTY, SlateportCity_EventScript_ReceiveScytherParty
+	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PC, SlateportCity_EventScript_ReceiveScytherPC
+	goto Common_EventScript_NoMoreRoomForPokemon
+	end
+
+SlateportCity_EventScript_ReceiveScytherParty::
+	call SlateportCity_EventScript_ReceivedScytherFanfare
+	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, SlateportCity_EventScript_ExplainScyther
+	call Common_EventScript_GetGiftMonPartySlot
+	call Common_EventScript_NameReceivedPartyMon
+	goto SlateportCity_EventScript_ExplainScyther
+	end
+
+SlateportCity_EventScript_ReceiveScytherPC::
+	call SlateportCity_EventScript_ReceivedScytherFanfare
+	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, SlateportCity_EventScript_SendScytherToPC
+	call Common_EventScript_NameReceivedBoxMon
+	goto SlateportCity_EventScript_SendScytherToPC
+	end
+
+SlateportCity_EventScript_SendScytherToPC::
+	call Common_EventScript_TransferredToPC
+	goto SlateportCity_EventScript_ExplainScyther
+	end
+
+SlateportCity_EventScript_ReceivedScytherFanfare::
+	playfanfare MUS_OBTAIN_ITEM
+	message SlateportCity_Text_PlayerReceivedScyther
+	waitmessage
+	waitfanfare
+	bufferspeciesname STR_VAR_1, SPECIES_SCYTHER
+	return
+
+SlateportCity_EventScript_ExplainScyther::
+	lock
+	msgbox SlateportCity_Text_PokemonIsStrong, MSGBOX_DEFAULT
+	setflag FLAG_RECEIVED_SCYTHER
+	release
+	end
+
+SlateportCity_EventScript_ComeBackIfYouWant::
+	msgbox SlateportCity_Text_ComeBackIfYouWant, MSGBOX_DEFAULT
+	release
+	end
+
+SlateportCity_EventScript_HowIsScyther::
+	msgbox SlateportCity_Text_HowIsScyther, MSGBOX_DEFAULT
+	release
+	end
+
 SlateportCity_EventScript_BerryPowderClerk::
 	lock
 	faceplayer
@@ -1383,3 +1447,24 @@ SlateportCity_Text_TakingBattleTentChallenge:
 	.string "After all, a tough TRAINER is\n"
 	.string "the perfect fit for the BATTLE TENT!\p"
 	.string "Give it your best effort!$"
+
+SlateportCity_Text_ThanksPleaseTakePokemon:
+	.string "Hey, do you want this POKéMON?\n"
+	.string "I would keep it, but it's pretty\p"
+	.string "aggressive and I'm not really a\n"
+	.string "trainer.$"
+
+SlateportCity_Text_PlayerReceivedScyther:
+	.string "{PLAYER} received SCYTHER!$"
+
+SlateportCity_Text_PokemonIsStrong:
+	.string "That POKéMON is really quite strong!\n"
+	.string "I hope you can train it well.$"
+
+SlateportCity_Text_HowIsScyther:
+	.string "SCYTHER looks a lot more energetic\n"
+	.string "with you. Thanks for taking SCYTHER in!$"
+
+SlateportCity_Text_ComeBackIfYouWant:
+	.string "Oh... I see. Well, if you want a\n"
+	.string "powerful ally, come back anytime!$"

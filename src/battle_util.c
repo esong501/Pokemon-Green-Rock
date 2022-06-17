@@ -3204,8 +3204,9 @@ enum
     ITEM_STATS_CHANGE,
 };
 
+// originally, these berries proc at half HP but they've been changed to proc at 1/4th
 #define TRY_EAT_CONFUSE_BERRY(flavor)                                                       \
-    if (gBattleMons[battlerId].hp <= gBattleMons[battlerId].maxHP / 2 && !moveTurn)         \
+    if (gBattleMons[battlerId].hp <= gBattleMons[battlerId].maxHP / 4 && !moveTurn)         \
     {                                                                                       \
         PREPARE_FLAVOR_BUFFER(gBattleTextBuff1, flavor);                                    \
         gBattleMoveDamage = gBattleMons[battlerId].maxHP / battlerHoldEffectParam;          \

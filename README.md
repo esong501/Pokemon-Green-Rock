@@ -13,7 +13,7 @@ Changelog:
 - TMs are now infinite use!
 - PLA-style change moves option!
 - removal of redundant strings
-- updated sitrus berry effect to Gen 4 and onward
+- updated sitrus berry effect to Gen 4+
 - physical/special split
     - corresponding icons in the summary screen
 - can forget HM moves!
@@ -22,6 +22,7 @@ Changelog:
     - any items used for trading evos are now usable items like evolution stones
     - also now available in the Lilicove Department Store
 - a new NPC in Slateport City now gives you a Scyther!
+- updated Figy/Wiki/Mago/Aguav/Iapapa berry effects to Gen 4+
 
 Moves: (Most have been changed to their Gen 7+ attributes)
 - Cut

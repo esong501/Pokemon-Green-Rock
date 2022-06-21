@@ -29,6 +29,7 @@ Changelog:
 - updated Figy/Wiki/Mago/Aguav/Iapapa berry effects to Gen 4+
 - new scripts have been added
     - you can now obtain all 3 starters without trading!
+- the first option for berries is now use as opposed to check tag
 
 ### Moves: (Most have been changed to their Gen 7+ attributes)
 - Cut

@@ -663,6 +663,167 @@ LittlerootTown_ProfessorBirchsLab_EventScript_ScottAboardSSTidalCall::
 	releaseall
 	end
 
+LittlerootTown_ProfessorBirchsLab_EventScript_GiveTreecko::
+	bufferspeciesname STR_VAR_1, SPECIES_TREECKO
+	setvar VAR_TEMP_1, SPECIES_TREECKO
+	givemon SPECIES_TREECKO, 5
+	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PARTY, LittlerootTown_ProfessorBirchsLab_EventScript_SendTreeckoToParty
+	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PC, LittlerootTown_ProfessorBirchsLab_EventScript_SendTreeckoToPC
+	goto Common_EventScript_NoMoreRoomForPokemon
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_SendTreeckoToParty::
+	call LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedHoennStarter
+	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedTreecko
+	call Common_EventScript_GetGiftMonPartySlot
+	call Common_EventScript_NameReceivedPartyMon
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedTreecko
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_SendTreeckoToPC::
+	call LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedHoennStarter
+	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, LittlerootTown_ProfessorBirchsLab_EventScript_TreeckoTransferredToPC
+	call Common_EventScript_NameReceivedBoxMon
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_TreeckoTransferredToPC
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_TreeckoTransferredToPC::
+	call Common_EventScript_TransferredToPC
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedTreecko
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedTreecko::
+	return
+
+LittlerootTown_ProfessorBirchsLab_EventScript_GiveTorchic::
+	bufferspeciesname STR_VAR_1, SPECIES_TORCHIC
+	setvar VAR_TEMP_1, SPECIES_TORCHIC
+	givemon SPECIES_TORCHIC, 5
+	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PARTY, LittlerootTown_ProfessorBirchsLab_EventScript_SendTorchicToParty
+	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PC, LittlerootTown_ProfessorBirchsLab_EventScript_SendTorchicToPC
+	goto Common_EventScript_NoMoreRoomForPokemon
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_SendTorchicToParty::
+	call LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedHoennStarter
+	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedTorchic
+	call Common_EventScript_GetGiftMonPartySlot
+	call Common_EventScript_NameReceivedPartyMon
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedTorchic
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_SendTorchicToPC::
+	call LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedHoennStarter
+	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, LittlerootTown_ProfessorBirchsLab_EventScript_TorchicTransferredToPC
+	call Common_EventScript_NameReceivedBoxMon
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_TorchicTransferredToPC
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_TorchicTransferredToPC::
+	call Common_EventScript_TransferredToPC
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedTorchic
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedTorchic::
+	return
+
+LittlerootTown_ProfessorBirchsLab_EventScript_GiveMudkip::
+	bufferspeciesname STR_VAR_1, SPECIES_MUDKIP
+	setvar VAR_TEMP_1, SPECIES_MUDKIP
+	givemon SPECIES_MUDKIP, 5
+	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PARTY, LittlerootTown_ProfessorBirchsLab_EventScript_SendMudkipToParty
+	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PC, LittlerootTown_ProfessorBirchsLab_EventScript_SendMudkipToPC
+	goto Common_EventScript_NoMoreRoomForPokemon
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_SendMudkipToParty::
+	call LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedHoennStarter
+	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedMudkip
+	call Common_EventScript_GetGiftMonPartySlot
+	call Common_EventScript_NameReceivedPartyMon
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedMudkip
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_SendMudkipToPC::
+	call LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedHoennStarter
+	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, LittlerootTown_ProfessorBirchsLab_EventScript_MudkipTransferredToPC
+	call Common_EventScript_NameReceivedBoxMon
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_MudkipTransferredToPC
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_MudkipTransferredToPC::
+	call Common_EventScript_TransferredToPC
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedMudkip
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedMudkip::
+	return
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedHoennStarter::
+	playfanfare MUS_OBTAIN_ITEM
+	message LittlerootTown_ProfessorBirchsLab_Text_ReceivedJohtoStarter
+	waitmessage
+	waitfanfare
+	return
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BirchBag::
+	lockall
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_BirchBag, MSGBOX_DEFAULT
+	goto_if_unset FLAG_RECEIVED_STARTERS, LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveOtherStarters
+	releaseall
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveOtherStarters::
+	applymovement LOCALID_BIRCH, Common_Movement_FaceUp
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_Bag, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, YES, LittlerootTown_ProfessorBirchsLab_EventScript_CheckStarter
+	releaseall
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_CheckStarter::
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_ReceiveOtherStarters, MSGBOX_DEFAULT
+	goto_if_set FLAG_RECEIVED_TREECKO, LittlerootTown_ProfessorBirchsLab_EventScript_Get23
+	goto_if_set FLAG_RECEIVED_TORCHIC, LittlerootTown_ProfessorBirchsLab_EventScript_Get13
+	goto_if_set FLAG_RECEIVED_MUDKIP, LittlerootTown_ProfessorBirchsLab_EventScript_Get12
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_Get123
+	releaseall
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_Get123::
+	call LittlerootTown_ProfessorBirchsLab_EventScript_GiveTreecko
+	call LittlerootTown_ProfessorBirchsLab_EventScript_GiveTorchic
+	call LittlerootTown_ProfessorBirchsLab_EventScript_GiveMudkip
+	setflag FLAG_RECEIVED_STARTERS
+	releaseall
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_Get12::
+	call LittlerootTown_ProfessorBirchsLab_EventScript_GiveTreecko
+	call LittlerootTown_ProfessorBirchsLab_EventScript_GiveTorchic
+	setflag FLAG_RECEIVED_STARTERS
+	releaseall
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_Get23::
+	call LittlerootTown_ProfessorBirchsLab_EventScript_GiveTorchic
+	call LittlerootTown_ProfessorBirchsLab_EventScript_GiveMudkip
+	setflag FLAG_RECEIVED_STARTERS
+	releaseall
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_Get13::
+	call LittlerootTown_ProfessorBirchsLab_EventScript_GiveTreecko
+	call LittlerootTown_ProfessorBirchsLab_EventScript_GiveMudkip
+	setflag FLAG_RECEIVED_STARTERS
+	releaseall
+	end
+
 LittlerootTown_ProfessorBirchsLab_Text_BirchAwayOnFieldwork:
 	.string "Hunh? PROF. BIRCH?\p"
 	.string "The PROF's away on fieldwork.\n"
@@ -999,3 +1160,17 @@ LittlerootTown_ProfessorBirchsLab_Text_ScottAboardSSTidalCall:
 	.string "we meet. I'll be waiting!\p"
 	.string "… … … … … …\n"
 	.string "… … … … … Click!$"
+
+LittlerootTown_ProfessorBirchsLab_Text_BirchBag:
+	.string "It's PROF. BIRCH's bag. Looks a bit\n"
+	.string "worn from going out in the field.$"
+
+LittlerootTown_ProfessorBirchsLab_Text_Bag:
+	.string "PROF. BIRCH: Are you curious about\n"
+	.string "the other POKéMON?$"
+
+LittlerootTown_ProfessorBirchsLab_Text_ReceiveOtherStarters:
+	.string "Judging by the way you handled\n"
+	.string "yourself earlier, I think you could\p"
+	.string "really take these POKéMON to their\n"
+	.string "maximum potential.$"

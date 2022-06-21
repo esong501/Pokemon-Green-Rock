@@ -27,8 +27,10 @@ Changelog:
     - also now available in the Lilicove Department Store
 - a new NPC in Slateport City now gives you a Scyther!
 - updated Figy/Wiki/Mago/Aguav/Iapapa berry effects to Gen 4+
+- new scripts have been added
+    - you can now obtain all 3 starters without trading!
 
-Moves: (Most have been changed to their Gen 7+ attributes)
+### Moves: (Most have been changed to their Gen 7+ attributes)
 - Cut
     - Type: Normal -> Grass
     - Power: 50 -> 60

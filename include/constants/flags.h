@@ -41,11 +41,11 @@
 #define FLAG_TEMP_1F     (TEMP_FLAGS_START + 0x1F)
 #define TEMP_FLAGS_END   FLAG_TEMP_1F
 
-#define FLAG_RECEIVED_SCYTHER    0x20 // Unused Flag
-#define FLAG_UNUSED_0x021    0x21 // Unused Flag
-#define FLAG_UNUSED_0x022    0x22 // Unused Flag
-#define FLAG_UNUSED_0x023    0x23 // Unused Flag
-#define FLAG_UNUSED_0x024    0x24 // Unused Flag
+#define FLAG_RECEIVED_SCYTHER    0x20 // Unused Flag: Now used for the NPC that gives you Scyther
+#define FLAG_RECEIVED_TREECKO    0x21 // Unused Flag: the next three are to determine which starter you need
+#define FLAG_RECEIVED_TORCHIC    0x22 // Unused Flag
+#define FLAG_RECEIVED_MUDKIP     0x23 // Unused Flag
+#define FLAG_RECEIVED_STARTERS   0x24 // Unused Flag: flag denoting all starters are taken
 #define FLAG_UNUSED_0x025    0x25 // Unused Flag
 #define FLAG_UNUSED_0x026    0x26 // Unused Flag
 #define FLAG_UNUSED_0x027    0x27 // Unused Flag

@@ -918,6 +918,13 @@ static void CB2_GiveStarter(void)
 
     *GetVarPointer(VAR_STARTER_MON) = gSpecialVar_Result;
     starterMon = GetStarterPokemon(gSpecialVar_Result);
+    // we want to set the appropriate flag for which starter the player chooses
+    if (starterMon == SPECIES_TREECKO)
+        FlagSet(FLAG_RECEIVED_TREECKO);
+    else if (starterMon == SPECIES_TORCHIC)
+        FlagSet(FLAG_RECEIVED_TORCHIC);
+    else if (starterMon == SPECIES_MUDKIP)
+        FlagSet(FLAG_RECEIVED_MUDKIP);
     ScriptGiveMon(starterMon, 5, ITEM_NONE, 0, 0, 0);
     ResetTasks();
     PlayBattleBGM();

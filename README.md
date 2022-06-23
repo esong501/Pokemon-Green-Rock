@@ -35,6 +35,7 @@ Changelog:
         - L: display IVs
         - R: display EVs
         - Start: display stats
+- you can now "change gears" on the bike by pressing R!
 
 ### Moves: (Most have been changed to their Gen 7+ attributes)
 - Cut

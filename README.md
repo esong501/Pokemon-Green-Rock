@@ -30,6 +30,11 @@ Changelog:
 - new scripts have been added
     - you can now obtain all 3 starters without trading!
 - the first option for berries is now use as opposed to check tag
+- IVs and EVs are now viewable from the summary screen!
+    - While viewing stats
+        - L: display IVs
+        - R: display EVs
+        - Start: display stats
 
 ### Moves: (Most have been changed to their Gen 7+ attributes)
 - Cut
@@ -45,6 +50,9 @@ Changelog:
     - Accuracy: 90 -> 100
 - Rock Blast
     - Accuracy: 90 -> 100
+
+-----------------------------------------------------------------
+Thank you to Lunos (change moves), GriffinR (map scripts), MeekRhino (map scripts), DizzyEggg (split icons), AkimotoBubble (IVs/EVs), and many more for their help and guidance in implementation!
 
 [1]: https://github.com/pret/pokeemerald    "pret/pokeemerald"
 [2]: https://www.smwcentral.net/?p=section&a=details&id=11474 "FLIPS"

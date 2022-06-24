@@ -2226,9 +2226,9 @@ static u8 TrySpinPlayerForWarp(struct ObjectEvent *object, s16 *delayTimer)
     if (!ObjectEventCheckHeldMovementStatus(object))
         return object->facingDirection;
 
-    ObjectEventForceSetHeldMovement(object, GetFaceDirectionMovementAction(gUnknown_084975BC[object->facingDirection]));
-    *a1 = 0;
-    return gUnknown_084975BC[object->facingDirection];
+    ObjectEventForceSetHeldMovement(object, GetFaceDirectionMovementAction(sSpinDirections[object->facingDirection]));
+    *delayTimer = 0;
+    return sSpinDirections[object->facingDirection];
 }
 
 // Surfboard
@@ -2240,8 +2240,8 @@ static bool8 CanStartSurfing(s16 x, s16 y, u8 direction)
     }
 
     if ((gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_ON_FOOT)
-     && MapGridGetZCoordAt(x, y) == 1
-     && GetObjectEventIdByXYZ(x, y, 1) == OBJECT_EVENTS_COUNT)
+     && MapGridGetElevationAt(x, y) == 1
+     && GetObjectEventIdByPosition(x, y, 1) == OBJECT_EVENTS_COUNT)
     {
         CreateStartSurfingTask(direction);
         return TRUE;
@@ -2263,7 +2263,7 @@ static void CreateStartSurfingTask(u8 direction)
 
     ScriptContext2_Enable();
     Overworld_ClearSavedMusic();
-    Overworld_ChangeMusicTo(MUS_NAMINORI);
+    Overworld_ChangeMusicTo(MUS_RG_SURF);
     gPlayerAvatar.flags ^= PLAYER_AVATAR_FLAG_ON_FOOT;
     gPlayerAvatar.flags |= PLAYER_AVATAR_FLAG_SURFING;
     gPlayerAvatar.preventStep = TRUE;

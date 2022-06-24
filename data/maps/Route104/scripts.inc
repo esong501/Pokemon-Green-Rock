@@ -998,6 +998,38 @@ Route104_EventScript_Darian::
 	msgbox Route104_Text_DarianPostBattle, MSGBOX_AUTOCLOSE
 	end
 
+Route104_EventScript_Surfer::
+	lock
+	faceplayer
+	goto_if_unset FLAG_BADGE05_GET, Route104_EventScript_LearnSurf
+	goto_if_set FLAG_RECEIVED_SURFBOARD, Route104_EventScript_ExplainSurf
+	msgbox Route104_Text_Surfer, MSGBOX_DEFAULT
+	msgbox Route104_Text_AskWantBoard, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, YES, Route104_EventScript_GiveSurfboard
+	goto_if_eq VAR_RESULT, NO, Route104_EventScript_DontNeedBoard
+	end
+
+Route104_EventScript_LearnSurf::
+	msgbox Route104_Text_LearnSurf, MSGBOX_DEFAULT
+	release
+	end
+
+Route104_EventScript_GiveSurfboard::
+	giveitem ITEM_SURFBOARD
+	setflag FLAG_RECEIVED_SURFBOARD
+	release
+	end
+
+Route104_EventScript_DontNeedBoard::
+	msgbox Route104_Text_DontNeedBoard, MSGBOX_DEFAULT
+	release
+	end
+
+Route104_EventScript_ExplainSurf::
+	msgbox Route104_Text_ExplainSurf, MSGBOX_DEFAULT
+	release
+	end
+
 Route104_Text_BrineyLivesInSeasideCottage:
 	.string "That seaside cottage is where\n"
 	.string "MR. BRINEY lives.\p"
@@ -1177,3 +1209,35 @@ Route104_Text_BrendanPostBattle:
 	.string "making POKéMON battle.\p"
 	.string "Like MR. BRINEY, it's important to\n"
 	.string "become friends with your POKéMON.$"
+
+Route104_Text_Surfer:
+	.string "I'm getting too old for this...\p"
+	.string "My kids have been really interested\n"
+	.string "in surfing. I was hoping to learn\p"
+	.string "so I could bond with them. But it's\n"
+	.string "been too much for me.$"
+
+Route104_Text_AskWantBoard:
+	.string "I've got no use for this now,\n"
+	.string "do you want it?$"
+
+Route104_Text_DontNeedBoard:
+	.string "Well, I suppose someone will\n"
+	.string "want this. Feel free to let me\p"
+	.string "know if you change your mind.$"
+
+Route104_Text_ExplainSurf:
+	.string "With that SURFBOARD, you'll be\n"
+	.string "able to run straight up to\p"
+	.string "coastlines and start riding the\n"
+	.string "waves! At least that's what my\p"
+	.string "kids tell me. I hope you enjoy it\n"
+	.string "as much as they do.$"
+
+Route104_Text_LearnSurf:
+	.string "Ha... ha... ha... Sorry... \p"
+	.string "let... me catch my... breath.\p"
+	.string "I've been... out in the water for\n"
+	.string "about an hour now... If only I\p"
+	.string "could use the HM SURF! How do\n"
+	.string "POKéMON do this so easily?$"

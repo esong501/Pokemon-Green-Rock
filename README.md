@@ -38,6 +38,7 @@ Changelog:
 - you can now "change gears" on the bike by pressing R!
 - default settings have now changed to fast text and set battle style
 - new surfboard item!
+    - can be obtained once the 5th gym is beaten on Route 104
 
 ### Moves: (Most have been changed to their Gen 7+ attributes)
 - Cut

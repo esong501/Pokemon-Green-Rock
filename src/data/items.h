@@ -4597,7 +4597,7 @@ const struct Item gItems[] =
     // Surfboard
     [ITEM_SURFBOARD] =
     {
-        .name = _("Surfboard"),
+        .name = _("SURFBOARD"),
         .itemId = ITEM_SURFBOARD,
         .price = 0,
         .description = sSurfboardDesc,

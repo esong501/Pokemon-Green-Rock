@@ -53,7 +53,7 @@ Changelog:
     - Accuracy: 90 -> 100
 
 -----------------------------------------------------------------
-Thank you to Lunos (change moves), GriffinR (map scripts), MeekRhino (map scripts), DizzyEggg (split icons), AkimotoBubble (IVs/EVs), and many more for their help and guidance in implementation!
+Thank you to Lunos (change moves and bicycle), GriffinR (map scripts), MeekRhino (map scripts), DizzyEggg (split icons), AkimotoBubble (IVs/EVs), and many more for their help and guidance in implementation!
 
 [1]: https://github.com/pret/pokeemerald    "pret/pokeemerald"
 [2]: https://www.smwcentral.net/?p=section&a=details&id=11474 "FLIPS"

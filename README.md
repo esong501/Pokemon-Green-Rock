@@ -36,6 +36,8 @@ Changelog:
         - R: display EVs
         - Start: display stats
 - you can now "change gears" on the bike by pressing R!
+- default settings have now changed to fast text and set battle style
+- new surfboard item!
 
 ### Moves: (Most have been changed to their Gen 7+ attributes)
 - Cut

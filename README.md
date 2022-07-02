@@ -29,6 +29,16 @@ Changelog:
 - updated Figy/Wiki/Mago/Aguav/Iapapa berry effects to Gen 4+
 - new scripts have been added
     - you can now obtain all 3 starters without trading!
+- the first option for berries is now use as opposed to check tag
+- IVs and EVs are now viewable from the summary screen!
+    - While viewing stats
+        - L: display IVs
+        - R: display EVs
+        - Start: display stats
+- you can now "change gears" on the bike by pressing R!
+- default settings have now changed to fast text and set battle style
+- new surfboard item!
+    - can be obtained once the 5th gym is beaten on Route 104
 
 ### Moves: (Most have been changed to their Gen 7+ attributes)
 - Cut
@@ -44,6 +54,9 @@ Changelog:
     - Accuracy: 90 -> 100
 - Rock Blast
     - Accuracy: 90 -> 100
+
+-----------------------------------------------------------------
+Thank you to Lunos (change moves and bicycle), GriffinR (map scripts), MeekRhino (map scripts), DizzyEggg (split icons), AkimotoBubble (IVs/EVs), and many more for their help and guidance in implementation!
 
 [1]: https://github.com/pret/pokeemerald    "pret/pokeemerald"
 [2]: https://www.smwcentral.net/?p=section&a=details&id=11474 "FLIPS"

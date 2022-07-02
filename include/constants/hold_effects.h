@@ -70,5 +70,7 @@
 #define HOLD_EFFECT_STICK          66
 // defining a new hold effect to account for percent HP
 #define HOLD_EFFECT_RESTORE_PCT_HP 67
+// fairy boost item
+#define HOLD_EFFECT_FAIRY_POWER    68
 
 #endif // GUARD_HOLD_EFFECTS_H

@@ -5,6 +5,11 @@ A modification of Pokemon Emerald built using [pret's disassembly][1] of the gam
 
 Use [FLIPS][2] to patch the .BPS file onto a clean Pokemon Emerald ROM (the option will appear as "Apply Patch"). From there, FLIPS will ask you for the clean unmodified ROM and THEN the patch (.BPS) file.
 
+### To Do:
+----------
+- adding fairy type moves and other modern moves
+- adding gen 4 Pokemon
+
 Changelog:
 -----------------------------------------------------------------------------
 - dismounting after surfing now properly renders ground effects
@@ -39,6 +44,8 @@ Changelog:
 - default settings have now changed to fast text and set battle style
 - new surfboard item!
     - can be obtained once the 5th gym is beaten on Route 104
+- fairy typing and updated type matchup chart!
+    - (super/not) effective moves are now in line with Gen 8
 
 ### Moves: (Most have been changed to their Gen 7+ attributes)
 - Cut

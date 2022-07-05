@@ -34,6 +34,7 @@ Changelog:
 - updated Figy/Wiki/Mago/Aguav/Iapapa berry effects to Gen 4+
 - new scripts have been added
     - you can now obtain all 3 starters without trading!
+        - look for something that doesn't belong in Birch's Lab
 - the first option for berries is now use as opposed to check tag
 - IVs and EVs are now viewable from the summary screen!
     - While viewing stats

@@ -9,6 +9,7 @@ Use [FLIPS][2] to patch the .BPS file onto a clean Pokemon Emerald ROM (the opti
 ----------
 - adding fairy type moves and other modern moves
 - adding gen 4 Pokemon
+- understand [this code][3] better
 
 Changelog:
 -----------------------------------------------------------------------------
@@ -68,3 +69,4 @@ Thank you to Lunos (change moves and bicycle), GriffinR (map scripts), MeekRhino
 
 [1]: https://github.com/pret/pokeemerald    "pret/pokeemerald"
 [2]: https://www.smwcentral.net/?p=section&a=details&id=11474 "FLIPS"
+[3]: https://github.com/esong501/Pokemon-Green-Rock/compare/master...ghoulslash:pokeemerald:follow_me "follow me"

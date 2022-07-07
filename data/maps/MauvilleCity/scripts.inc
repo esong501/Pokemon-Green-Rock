@@ -462,6 +462,13 @@ MauvilleCity_EventScript_RegisterWallyCall::
 	releaseall
 	end
 
+SetFollower::
+	lock
+	faceplayer
+	setfollower 12 FOLLOWER_FLAG_ALL
+	release
+	end
+
 MauvilleCity_Text_UncleHesTooPeppy:
 	.string "UNCLE: It's because of POKéMON that\n"
 	.string "this boy's got more pep, I suppose…\l"

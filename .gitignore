@@ -40,4 +40,6 @@ porymap.project.cfg
 *.sym
 *.js
 *.zip
+*.bps
+
 

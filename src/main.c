@@ -69,7 +69,7 @@ u8 gLinkVSyncDisabled;
 u32 IntrMain_Buffer[0x200];
 s8 gPcmDmaCounter;
 
-static EWRAM_DATA u16 gTrainerId = 0;
+static EWRAM_DATA u16 sTrainerId = 0;
 
 //EWRAM_DATA void (**gFlashTimerIntrFunc)(void) = NULL;
 
@@ -103,10 +103,9 @@ void AgbMain()
     CheckForFlashMemory();
     InitMainCallbacks();
     InitMapMusic();
-// uncomment so we can fix the RNG that affects Trainer ID generation
-// #ifdef BUGFIX
+#ifdef BUGFIX
     SeedRngWithRtc(); // see comment at SeedRngWithRtc definition below
-// #endif
+#endif
     ClearDma3Requests();
     ResetBgs();
     SetDefaultFontsPointer();
@@ -202,12 +201,12 @@ void SeedRngAndSetTrainerId(void)
     u16 val = REG_TM1CNT_L;
     SeedRng(val);
     REG_TM1CNT_H = 0;
-    gTrainerId = val;
+    sTrainerId = val;
 }
 
 u16 GetGeneratedTrainerIdLower(void)
 {
-    return gTrainerId;
+    return sTrainerId;
 }
 
 void EnableVCountIntrAtLine150(void)
@@ -218,15 +217,14 @@ void EnableVCountIntrAtLine150(void)
 }
 
 // FRLG commented this out to remove RTC, however Emerald didn't undo this!
-// let's uncomment!
-// #ifdef BUGFIX
+#ifdef BUGFIX
 static void SeedRngWithRtc(void)
 {
     u32 seed = RtcGetMinuteCount();
     seed = (seed >> 16) ^ (seed & 0xFFFF);
     SeedRng(seed);
 }
-// #endif
+#endif
 
 void InitKeys(void)
 {
@@ -400,18 +398,12 @@ static void SerialIntr(void)
 static void IntrDummy(void)
 {}
 
-// used for vsyncing but the way it works now is super inefficient
-// instead of using a while loop, we'll use the function used in Ruby/Sapphire
 static void WaitForVBlank(void)
 {
     gMain.intrCheck &= ~INTR_FLAG_VBLANK;
 
-    // while (!(gMain.intrCheck & INTR_FLAG_VBLANK))
-    //     ;
-    // Ruby/Sapphire's function for vsyncing
-    // VBlankIntrWait();
-    // or, we could inline this function to save a function call
-    asm("swi 0x5");
+    while (!(gMain.intrCheck & INTR_FLAG_VBLANK))
+        ;
 }
 
 void SetTrainerHillVBlankCounter(u32 *counter)

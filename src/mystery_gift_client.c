@@ -44,7 +44,8 @@ u32 MysteryGiftClient_Run(u16 * endVal)
     {
         *endVal = sClient->param;
         MysteryGiftClient_Free(sClient);
-        FREE_AND_SET_NULL(sClient);
+        Free(sClient);
+        sClient = NULL;
     }
     return result;
 }
@@ -229,7 +230,7 @@ static u32 Client_Run(struct MysteryGiftClient * client)
         MysteryGift_TrySaveStamp(client->recvBuffer);
         break;
     case CLI_SAVE_RAM_SCRIPT:
-        InitRamScript_NoObjectEvent(client->recvBuffer, sizeof(struct RamScriptData));
+        InitRamScript_NoObjectEvent(client->recvBuffer, 1000);
         break;
     case CLI_RECV_EREADER_TRAINER:
         memcpy(&gSaveBlock2Ptr->frontier.ereaderTrainer, client->recvBuffer, sizeof(gSaveBlock2Ptr->frontier.ereaderTrainer));

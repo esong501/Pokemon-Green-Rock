@@ -688,7 +688,7 @@ struct
 {
     u32 facilityClass;
     const u8 *const *strings;
-} static const sPartnerTrainerTextTables[] =
+} const sPartnerTrainerTextTables[] =
 {
     {FACILITY_CLASS_LASS,                  sPartnerTextsLass},
     {FACILITY_CLASS_YOUNGSTER,             sPartnerTextsYoungster},
@@ -770,7 +770,7 @@ struct
     u8 nature;
     u8 evs[NUM_STATS];
     u16 moves[MAX_MON_MOVES];
-} static const sStevenMons[MULTI_PARTY_SIZE] =
+} const sStevenMons[MULTI_PARTY_SIZE] =
 {
     {
         .species = SPECIES_METANG,

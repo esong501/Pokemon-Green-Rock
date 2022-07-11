@@ -72,6 +72,10 @@
 #include "constants/party_menu.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
+// we include the naming screen file to allow us to add exiting to party screen
+#include "naming_screen.h"
+// including the move relearner file for that functionality
+#include "move_relearner.h"
 
 #define PARTY_PAL_SELECTED     (1 << 0)
 #define PARTY_PAL_FAINTED      (1 << 1)
@@ -115,7 +119,10 @@ struct PartyMenuInternal
     u32 spriteIdCancelPokeball:7;
     u32 messageId:14;
     u8 windowId[3];
-    u8 actions[8];
+    // originally at 8 elements, we need 9 now to fit our nickname option
+    // EDIT: we actually now need 10! We want to implement change moves like PLA
+    // u8 actions[8];
+    u8 actions[10];
     u8 numActions;
     // In vanilla Emerald, only the first 0xB0 hwords (0x160 bytes) are actually used.
     // However, a full 0x100 hwords (0x200 bytes) are allocated.
@@ -262,7 +269,8 @@ static void Task_UpdateHeldItemSprite(u8);
 static void Task_HandleSelectionMenuInput(u8);
 static void CB2_ShowPokemonSummaryScreen(void);
 static void UpdatePartyToBattleOrder(void);
-static void CB2_ReturnToPartyMenuFromSummaryScreen(void);
+// we remove this line because we've edited this function to not be static and accessible elsewhere
+// static void CB2_ReturnToPartyMenuFromSummaryScreen(void);
 static void SlidePartyMenuBoxOneStep(u8);
 static void Task_SlideSelectedSlotsOffscreen(u8);
 static void SwitchPartyMon(void);
@@ -380,6 +388,10 @@ static void ShiftMoveSlot(struct Pokemon*, u8, u8);
 static void BlitBitmapToPartyWindow_LeftColumn(u8, u8, u8, u8, u8, bool8);
 static void BlitBitmapToPartyWindow_RightColumn(u8, u8, u8, u8, u8, bool8);
 static void CursorCb_Summary(u8);
+// new cursor option
+static void CursorCb_Nickname(u8);
+// new cursor option for change moves
+static void CursorCb_ChangeMoves(u8);
 static void CursorCb_Switch(u8);
 static void CursorCb_Cancel1(u8);
 static void CursorCb_Item(u8);
@@ -2532,7 +2544,7 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 
     sPartyMenuInternal->numActions = 0;
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUMMARY);
-
+    
     // Add field moves to action list
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
@@ -2548,6 +2560,14 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 
     if (!InBattlePike())
     {
+        // adding this option to list on the menu
+        // we also can't nickname traded Pokemon
+        if (!IsTradedMon(&mons[slotId]))
+            AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_NICKNAME);
+        // adding change moves option to list on the menu
+        // we can only change moves outside of the battle pike and if the Pokemon has enough moves to relearn
+        if (GetNumberOfRelearnableMoves(&mons[slotId]) != 0)
+            AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_CHANGE_MOVES);
         if (GetMonData(&mons[1], MON_DATA_SPECIES) != SPECIES_NONE)
             AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SWITCH);
         if (ItemIsMail(GetMonData(&mons[slotId], MON_DATA_HELD_ITEM)))
@@ -2696,6 +2716,51 @@ static void CursorCb_Summary(u8 taskId)
     Task_ClosePartyMenu(taskId);
 }
 
+// these functions implements functionality upon selecting change nickname
+static void ChangePokemonNicknamePartyScreen_CB(void)
+{
+    SetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_NICKNAME, gStringVar2);
+    CB2_ReturnToPartyMenuFromSummaryScreen();
+}
+
+static void ChangePokemonNicknamePartyScreen(void)
+{
+    GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_NICKNAME, gStringVar3);
+    GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_NICKNAME, gStringVar2);
+    DoNamingScreen(NAMING_SCREEN_NICKNAME, gStringVar2, GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_SPECIES, NULL), GetMonGender(&gPlayerParty[gSpecialVar_0x8004]), GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_PERSONALITY, NULL), ChangePokemonNicknamePartyScreen_CB);
+}
+
+static void CursorCb_Nickname(u8 taskId)
+{
+    PlaySE(SE_SELECT);
+    gSpecialVar_0x8004 = gPartyMenu.slotId;
+    gLastViewedMonIndex = gPartyMenu.slotId;
+    sPartyMenuInternal->exitCallback = ChangePokemonNicknamePartyScreen;
+    Task_ClosePartyMenu(taskId);
+}
+// end of new functions
+
+// these functions implements functionality upon selecting change moves
+static void ChangePokemonMovesScreen_CB(void)
+{
+    SetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_NICKNAME, gStringVar2);
+    CB2_ReturnToPartyMenuFromSummaryScreen();
+}
+
+static void CursorCb_ChangeMoves(u8 taskId)
+{
+    PlaySE(SE_SELECT);
+    FlagSet(FLAG_TEMP_1);
+    gSpecialVar_0x8004 = gPartyMenu.slotId;
+    gSpecialVar_0x8005 = GetNumberOfRelearnableMoves(&gPlayerParty[gSpecialVar_0x8004]);
+    gLastViewedMonIndex = gPartyMenu.slotId;
+    DisplayPartyPokemonDataForRelearner(gSpecialVar_0x8004);
+    TeachMoveRelearnerMove();
+    sPartyMenuInternal->exitCallback = TeachMoveRelearnerMove;
+    Task_ClosePartyMenu(taskId);
+}
+// end of new functions
+
 static void CB2_ShowPokemonSummaryScreen(void)
 {
     if (gPartyMenu.menuType == PARTY_MENU_TYPE_IN_BATTLE)
@@ -2709,7 +2774,8 @@ static void CB2_ShowPokemonSummaryScreen(void)
     }
 }
 
-static void CB2_ReturnToPartyMenuFromSummaryScreen(void)
+// removing static keyword from this definition
+void CB2_ReturnToPartyMenuFromSummaryScreen(void)
 {
     gPaletteFade.bufferTransferDisabled = TRUE;
     gPartyMenu.slotId = gLastViewedMonIndex;
@@ -4697,8 +4763,11 @@ static void Task_LearnedMove(u8 taskId)
     if (move[1] == 0)
     {
         AdjustFriendship(mon, FRIENDSHIP_EVENT_LEARN_TMHM);
-        if (item < ITEM_HM01_CUT)
-            RemoveBagItem(item, 1);
+        // this if block says if the TM/HM we use to teach a move
+        // has an ID less than the first HM, consume it
+        // But, we want reusable TMs so we'll just take this out
+        // if (item < ITEM_HM01_CUT)
+        //     RemoveBagItem(item, 1);
     }
     GetMonNickname(mon, gStringVar1);
     StringCopy(gStringVar2, gMoveNames[move[0]]);
@@ -4803,13 +4872,21 @@ static void Task_PartyMenuReplaceMove(u8 taskId)
 {
     struct Pokemon *mon;
     u16 move;
+    // adding an integer to store the old amount of PP this move had
+    u8 oldPP;
 
     if (IsPartyMenuTextPrinterActive() != TRUE)
     {
         mon = &gPlayerParty[gPartyMenu.slotId];
         RemoveMonPPBonus(mon, GetMoveSlotToReplace());
+        // this is to assign the amount of PP we had left
+        oldPP = GetMonData(mon, MON_DATA_PP1 + GetMoveSlotToReplace(), NULL);
         move = gPartyMenu.data1;
         SetMonMoveSlot(mon, move, GetMoveSlotToReplace());
+        // if the move we're setting has a higher base PP than the amount we had
+        // learn the new move and give it the old PP amount
+        if (GetMonData(mon, MON_DATA_PP1 + GetMoveSlotToReplace(), NULL) > oldPP)
+            SetMonData(mon, MON_DATA_PP1 + GetMoveSlotToReplace(), &oldPP);
         Task_LearnedMove(taskId);
     }
 }
@@ -4969,7 +5046,7 @@ static void Task_TryLearnNewMoves(u8 taskId)
 {
     u16 learnMove;
 
-    if (WaitFanfare(FALSE) && ((JOY_NEW(A_BUTTON)) || (JOY_NEW(B_BUTTON))))
+    if (WaitFanfare(0) && ((JOY_NEW(A_BUTTON)) || (JOY_NEW(B_BUTTON))))
     {
         RemoveLevelUpStatsWindow();
         learnMove = MonTryLearningNewMove(&gPlayerParty[gPartyMenu.slotId], TRUE);

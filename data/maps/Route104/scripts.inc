@@ -338,7 +338,7 @@ Route104_EventScript_Boy2::
 	end
 
 Route104_EventScript_ReceivedBulletSeed::
-	msgbox Route104_Text_TMsAreOneTimeUse, MSGBOX_DEFAULT
+	msgbox Route104_Text_TMsCanBeReused, MSGBOX_DEFAULT
 	release
 	end
 
@@ -1041,6 +1041,13 @@ Route104_Text_TMsAreOneTimeUse:
 	.string "for one-time use.\p"
 	.string "Once you use it, it's gone.\n"
 	.string "Think twice before using it!$"
+
+Route104_Text_TMsCanBeReused:
+	.string "One more thing!\p"
+	.string "A TM, TECHNICAL MACHINE, is good for\n"
+	.string "multiple uses.\p"
+	.string "Use it as many times as you like on\n"
+	.string "your favorite POKéMON!$"
 
 Route104_Text_DontNeedThisTakeIt:
 	.string "This FLOWER SHOP started selling\n"

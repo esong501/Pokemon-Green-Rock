@@ -666,6 +666,10 @@ static const u16 sUnusedData[] =
 enum
 {
     MENU_SUMMARY,
+    // adding an option in the menu to change nickname
+    MENU_NICKNAME,
+    // adding an option in the menu to bring up move reminder
+    MENU_CHANGE_MOVES,
     MENU_SWITCH,
     MENU_CANCEL1,
     MENU_ITEM,
@@ -715,6 +719,10 @@ struct
 } static const sCursorOptions[] =
 {
     [MENU_SUMMARY] = {gText_Summary5, CursorCb_Summary},
+    // adding a cursor option for this new nickname feature
+    [MENU_NICKNAME] = {gText_Nickname, CursorCb_Nickname},
+    // adding a cursor option for this new nickname feature
+    [MENU_CHANGE_MOVES] = {gText_ChangeMoves, CursorCb_ChangeMoves},
     [MENU_SWITCH] = {gText_Switch2, CursorCb_Switch},
     [MENU_CANCEL1] = {gText_Cancel2, CursorCb_Cancel1},
     [MENU_ITEM] = {gText_Item, CursorCb_Item},

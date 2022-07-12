@@ -463,6 +463,7 @@ MauvilleCity_EventScript_RegisterWallyCall::
 	end
 
 MauvilleCity_EventScript_Winona::
+	goto_if_set FLAG_DEFEATED_FORTREE_GYM, MauvilleCity_EventScript_WinonaLost
 	goto_if_set FLAG_BADGE05_GET, MauvilleCity_EventScript_WinonaBadge6
 	goto_if_set FLAG_BADGE04_GET, MauvilleCity_EventScript_WinonaBadge5
 	trainerbattle_single TRAINER_WINONA_B4, MauvilleCity_Text_WinonaIntro, MauvilleCity_Text_WinonaDefeat, MauvilleCity_EventScript_WinonaDefeated4, NO_MUSIC
@@ -509,7 +510,13 @@ MauvilleCity_EventScript_WinonaDefeated6::
 	release
 	end
 
+MauvilleCity_EventScript_WinonaLost::
+	msgbox MauvilleCity_Text_WinonaPostBattle, MSGBOX_DEFAULT
+	release
+	end
+
 MauvilleCity_EventScript_Norman::
+	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, MauvilleCity_EventScript_NormanLost
 	goto_if_set FLAG_BADGE04_GET, MauvilleCity_EventScript_NormanBadge5
 	trainerbattle_single TRAINER_NORMAN_B4, MauvilleCity_Text_NormanIntro, MauvilleCity_Text_NormanDefeat, MauvilleCity_EventScript_NormanDefeated4, NO_MUSIC
 	specialvar VAR_RESULT, ShouldTryRematchBattle
@@ -537,6 +544,11 @@ MauvilleCity_EventScript_NormanDefeated5::
 	setflag FLAG_DEFEATED_PETALBURG_GYM
 	setflag FLAG_BADGE05_GET
 	setvar VAR_0x8008, 5
+	release
+	end
+
+MauvilleCity_EventScript_NormanLost::
+	msgbox MauvilleCity_Text_NormanPostBattle, MSGBOX_DEFAULT
 	release
 	end
 

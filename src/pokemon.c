@@ -69,9 +69,7 @@ EWRAM_DATA u8 gEnemyPartyCount = 0;
 EWRAM_DATA struct Pokemon gPlayerParty[PARTY_SIZE] = {0};
 EWRAM_DATA struct Pokemon gEnemyParty[PARTY_SIZE] = {0};
 EWRAM_DATA struct SpriteTemplate gMultiuseSpriteTemplate = {0};
-// not gonna lie, not sure what changing this struct does
-EWRAM_DATA static struct MonSpritesGfxManager *sMonSpritesGfxManager = NULL;
-// EWRAM_DATA static struct MonSpritesGfxManager *sMonSpritesGfxManagers[MON_SPR_GFX_MANAGERS_COUNT] = {NULL};
+EWRAM_DATA static struct MonSpritesGfxManager *sMonSpritesGfxManagers[MON_SPR_GFX_MANAGERS_COUNT] = {NULL};
 
 #include "data/battle_moves.h"
 
@@ -3160,11 +3158,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
         if (attackerHoldEffect == sHoldEffectToType[i][0]
             && type == sHoldEffectToType[i][1])
         {
-            // this conditional block is effectively useless because we are not deciding category based on type
-            // if (IS_TYPE_PHYSICAL(type))
-            attack = (attack * (attackerHoldEffectParam + 100)) / 100;
-            // else
-            spAttack = (spAttack * (attackerHoldEffectParam + 100)) / 100;
+            if (IS_TYPE_PHYSICAL(type))
+                attack = (attack * (attackerHoldEffectParam + 100)) / 100;
+            else
+                spAttack = (spAttack * (attackerHoldEffectParam + 100)) / 100;
             break;
         }
     }
@@ -3189,9 +3186,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
     // Apply abilities / field sports
     if (defender->ability == ABILITY_THICK_FAT && (type == TYPE_FIRE || type == TYPE_ICE))
-        // it's not just special attack anymore
-        // spAttack /= 2;
-        gBattleMovePower /= 2;
+        spAttack /= 2;
     if (attacker->ability == ABILITY_HUSTLE)
         attack = (150 * attack) / 100;
     if (attacker->ability == ABILITY_PLUS && ABILITY_ON_FIELD2(ABILITY_MINUS))
@@ -3219,7 +3214,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     if (gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION)
         defense /= 2;
 
-    if (IS_MOVE_PHYSICAL(gCurrentMove))
+    if (IS_TYPE_PHYSICAL(type))
     {
         if (gCritMultiplier == 2)
         {
@@ -3274,7 +3269,7 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     if (type == TYPE_MYSTERY)
         damage = 0; // is ??? type. does 0 damage.
 
-    if (IS_MOVE_SPECIAL(gCurrentMove))
+    if (IS_TYPE_SPECIAL(type))
     {
         if (gCritMultiplier == 2)
         {
@@ -3318,83 +3313,45 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
             damage /= 2;
 
         // Are effects of weather negated with cloud nine or air lock
-        // this block of code needs to apply both for special and physical moves, so we'll take it and place it
-        // outside of either
-        // if (WEATHER_HAS_EFFECT2)
-        // {
-        //     // Rain weakens Fire, boosts Water
-        //     if (gBattleWeather & B_WEATHER_RAIN_TEMPORARY)
-        //     {
-        //         switch (type)
-        //         {
-        //         case TYPE_FIRE:
-        //             damage /= 2;
-        //             break;
-        //         case TYPE_WATER:
-        //             damage = (15 * damage) / 10;
-        //             break;
-        //         }
-        //     }
+        if (WEATHER_HAS_EFFECT2)
+        {
+            // Rain weakens Fire, boosts Water
+            if (gBattleWeather & B_WEATHER_RAIN_TEMPORARY)
+            {
+                switch (type)
+                {
+                case TYPE_FIRE:
+                    damage /= 2;
+                    break;
+                case TYPE_WATER:
+                    damage = (15 * damage) / 10;
+                    break;
+                }
+            }
 
             // Any weather except sun weakens solar beam
-            // this line can actually be left because solarbeam is only special
             if ((gBattleWeather & (B_WEATHER_RAIN | B_WEATHER_SANDSTORM | B_WEATHER_HAIL)) && gCurrentMove == MOVE_SOLAR_BEAM)
                 damage /= 2;
 
-        //     // Sun boosts Fire, weakens Water
-        //     if (gBattleWeather & B_WEATHER_SUN)
-        //     {
-        //         switch (type)
-        //         {
-        //         case TYPE_FIRE:
-        //             damage = (15 * damage) / 10;
-        //             break;
-        //         case TYPE_WATER:
-        //             damage /= 2;
-        //             break;
-        //         }
-        //     }
-        // }
+            // Sun boosts Fire, weakens Water
+            if (gBattleWeather & B_WEATHER_SUN)
+            {
+                switch (type)
+                {
+                case TYPE_FIRE:
+                    damage = (15 * damage) / 10;
+                    break;
+                case TYPE_WATER:
+                    damage /= 2;
+                    break;
+                }
+            }
+        }
 
         // Flash fire triggered
-        // we can move this outside of the special block too
-        // if ((gBattleResources->flags->flags[battlerIdAtk] & RESOURCE_FLAG_FLASH_FIRE) && type == TYPE_FIRE)
-        //     damage = (15 * damage) / 10;
-    }
-
-    if (WEATHER_HAS_EFFECT2)
-    {
-        // Rain weakens Fire, boosts Water
-        if (gBattleWeather & B_WEATHER_RAIN_TEMPORARY)
-        {
-            switch (type)
-            {
-            case TYPE_FIRE:
-                damage /= 2;
-                break;
-            case TYPE_WATER:
-                damage = (15 * damage) / 10;
-                break;
-            }
-        }
-
-        // Sun boosts Fire, weakens Water
-        if (gBattleWeather & B_WEATHER_SUN)
-        {
-            switch (type)
-            {
-            case TYPE_FIRE:
-                damage = (15 * damage) / 10;
-                break;
-            case TYPE_WATER:
-                damage /= 2;
-                break;
-            }
-        }
-    }
-
-    if ((gBattleResources->flags->flags[battlerIdAtk] & RESOURCE_FLAG_FLASH_FIRE) && type == TYPE_FIRE)
+        if ((gBattleResources->flags->flags[battlerIdAtk] & RESOURCE_FLAG_FLASH_FIRE) && type == TYPE_FIRE)
             damage = (15 * damage) / 10;
+    }
 
     return damage + 2;
 }
@@ -3512,22 +3469,16 @@ u8 GetGenderFromSpeciesAndPersonality(u16 species, u32 personality)
         return MON_MALE;
 }
 
-// we're changing this function 
 void SetMultiuseSpriteTemplateToPokemon(u16 speciesTag, u8 battlerPosition)
 {
-    // if (gMonSpritesGfxPtr != NULL)
-    //     gMultiuseSpriteTemplate = gMonSpritesGfxPtr->templates[battlerPosition];
-    // else if (sMonSpritesGfxManagers[MON_SPR_GFX_MANAGER_A])
-    //     gMultiuseSpriteTemplate = sMonSpritesGfxManagers[MON_SPR_GFX_MANAGER_A]->templates[battlerPosition];
-    // else if (sMonSpritesGfxManagers[MON_SPR_GFX_MANAGER_B])
-    //     gMultiuseSpriteTemplate = sMonSpritesGfxManagers[MON_SPR_GFX_MANAGER_B]->templates[battlerPosition];
-    // else
-    //     gMultiuseSpriteTemplate = gBattlerSpriteTemplates[battlerPosition];
-    // optimizing the if else block
     if (gMonSpritesGfxPtr != NULL)
         gMultiuseSpriteTemplate = gMonSpritesGfxPtr->templates[battlerPosition];
-    else if (sMonSpritesGfxManager)
-        gMultiuseSpriteTemplate = sMonSpritesGfxManager->templates[battlerPosition];
+    else if (sMonSpritesGfxManagers[MON_SPR_GFX_MANAGER_A])
+        gMultiuseSpriteTemplate = sMonSpritesGfxManagers[MON_SPR_GFX_MANAGER_A]->templates[battlerPosition];
+    else if (sMonSpritesGfxManagers[MON_SPR_GFX_MANAGER_B])
+        gMultiuseSpriteTemplate = sMonSpritesGfxManagers[MON_SPR_GFX_MANAGER_B]->templates[battlerPosition];
+    else
+        gMultiuseSpriteTemplate = gBattlerSpriteTemplates[battlerPosition];
 
     gMultiuseSpriteTemplate.paletteTag = speciesTag;
     if (battlerPosition == B_POSITION_PLAYER_LEFT || battlerPosition == B_POSITION_PLAYER_RIGHT)
@@ -5069,17 +5020,6 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
                             if (dataUnsigned == 0)
                                 dataUnsigned = 1;
                             break;
-                        // adding new cases for both a third and a quarter health
-                        case ITEM6_HEAL_HP_THIRD:
-                            dataUnsigned = GetMonData(mon, MON_DATA_MAX_HP, NULL) / 3;
-                            if (dataUnsigned == 0)
-                                dataUnsigned = 1;
-                            break;
-                        case ITEM6_HEAL_HP_QUARTER:
-                            dataUnsigned = GetMonData(mon, MON_DATA_MAX_HP, NULL) / 4;
-                            if (dataUnsigned == 0)
-                                dataUnsigned = 1;
-                            break;
                         case ITEM6_HEAL_HP_LVL_UP:
                             dataUnsigned = gBattleScripting.levelUpHP;
                             break;
@@ -5441,10 +5381,10 @@ u8 GetItemEffectParamOffset(u16 itemId, u8 effectByte, u8 effectBit)
     return offset;
 }
 
-static void BufferStatRoseMessage(s32 arg0)
+static void BufferStatRoseMessage(s32 statIdx)
 {
     gBattlerTarget = gBattlerInMenuId;
-    StringCopy(gBattleTextBuff1, gStatNamesTable[sStatsToRaise[arg0]]);
+    StringCopy(gBattleTextBuff1, gStatNamesTable[sStatsToRaise[statIdx]]);
     StringCopy(gBattleTextBuff2, gText_StatRose);
     BattleStringExpandPlaceholdersToDisplayedString(gText_DefendersStatRose);
 }
@@ -5860,13 +5800,13 @@ u16 GetLinkTrainerFlankId(u8 linkPlayerId)
     return flankId;
 }
 
-s32 GetBattlerMultiplayerId(u16 a1)
+s32 GetBattlerMultiplayerId(u16 id)
 {
-    s32 id;
-    for (id = 0; id < MAX_LINK_PLAYERS; id++)
-        if (gLinkPlayers[id].id == a1)
+    s32 multiplayerId;
+    for (multiplayerId = 0; multiplayerId < MAX_LINK_PLAYERS; multiplayerId++)
+        if (gLinkPlayers[multiplayerId].id == id)
             break;
-    return id;
+    return multiplayerId;
 }
 
 u8 GetTrainerEncounterMusicId(u16 trainerOpponentId)
@@ -6649,12 +6589,12 @@ void SetWildMonHeldItem(void)
         u16 rnd = Random() % 100;
         u16 species = GetMonData(&gEnemyParty[0], MON_DATA_SPECIES, 0);
         u16 chanceNoItem = 45;
-        u16 chanceCommon = 95;
+        u16 chanceNotRare = 95;
         if (!GetMonData(&gPlayerParty[0], MON_DATA_SANITY_IS_EGG, 0)
             && GetMonAbility(&gPlayerParty[0]) == ABILITY_COMPOUND_EYES)
         {
             chanceNoItem = 20;
-            chanceCommon = 80;
+            chanceNotRare = 80;
         }
         if (gMapHeader.mapLayoutId == LAYOUT_ALTERING_CAVE)
         {
@@ -6662,7 +6602,7 @@ void SetWildMonHeldItem(void)
             if (alteringCaveId != 0)
             {
                 // In active Altering Cave, use special item list
-                if (rnd < chanceCommon)
+                if (rnd < chanceNotRare)
                     return;
                 SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, &sAlteringCaveWildMonHeldItems[alteringCaveId].item);
             }
@@ -6671,27 +6611,27 @@ void SetWildMonHeldItem(void)
                 // In inactive Altering Cave, use normal items
                 if (rnd < chanceNoItem)
                     return;
-                if (rnd < chanceCommon)
-                    SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, &gBaseStats[species].item1);
+                if (rnd < chanceNotRare)
+                    SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, &gBaseStats[species].itemCommon);
                 else
-                    SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, &gBaseStats[species].item2);
+                    SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, &gBaseStats[species].itemRare);
             }
         }
         else
         {
-            if (gBaseStats[species].item1 == gBaseStats[species].item2 && gBaseStats[species].item1 != ITEM_NONE)
+            if (gBaseStats[species].itemCommon == gBaseStats[species].itemRare && gBaseStats[species].itemCommon != ITEM_NONE)
             {
                 // Both held items are the same, 100% chance to hold item
-                SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, &gBaseStats[species].item1);
+                SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, &gBaseStats[species].itemCommon);
             }
             else
             {
                 if (rnd < chanceNoItem)
                     return;
-                if (rnd < chanceCommon)
-                    SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, &gBaseStats[species].item1);
+                if (rnd < chanceNotRare)
+                    SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, &gBaseStats[species].itemCommon);
                 else
-                    SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, &gBaseStats[species].item2);
+                    SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, &gBaseStats[species].itemRare);
             }
         }
     }
@@ -6986,13 +6926,11 @@ static bool8 ShouldSkipFriendshipChange(void)
 #define ALLOC_FAIL_STRUCT (1 << 1)
 #define GFX_MANAGER_ACTIVE 0xA3 // Arbitrary value
 #define GFX_MANAGER_SPR_SIZE (MON_PIC_SIZE * 4) // Only Castform uses more than MON_PIC_SIZE, despite not displaying its forms.
-#define GFX_MANAGER_NUM_FRAMES 2  // Only 2 frames are needed
+#define GFX_MANAGER_NUM_FRAMES 4  // Only 2 frames are needed
 
 static void InitMonSpritesGfx_Battle(struct MonSpritesGfxManager* gfx)
 {
-    // changing the integer to a u32 int
-    // u16 i, j;
-    u32 i,j;
+    u16 i, j;
     for (i = 0; i < gfx->numSprites; i++)
     {
         gfx->templates[i] = gBattlerSpriteTemplates[i];
@@ -7018,117 +6956,41 @@ static void InitMonSpritesGfx_FullParty(struct MonSpritesGfxManager* gfx)
     }
 }
 
-// struct MonSpritesGfxManager *CreateMonSpritesGfxManager(u8 managerId, u8 mode)
-// {
-//     u8 i;
-//     u8 failureFlags;
-//     struct MonSpritesGfxManager *gfx;
-
-//     failureFlags = 0;
-//     managerId %= MON_SPR_GFX_MANAGERS_COUNT;
-//     gfx = AllocZeroed(sizeof(*gfx));
-//     if (gfx == NULL)
-//         return NULL;
-
-//     switch (mode)
-//     {
-//     case MON_SPR_GFX_MODE_FULL_PARTY:
-//         gfx->numSprites = PARTY_SIZE + 1;
-//         gfx->numSprites2 = PARTY_SIZE + 1;
-//         gfx->numFrames = GFX_MANAGER_NUM_FRAMES;
-//         gfx->dataSize = 1;
-//         gfx->mode = MON_SPR_GFX_MODE_FULL_PARTY;
-//         break;
-//  // case MON_SPR_GFX_MODE_BATTLE:       
-//     case MON_SPR_GFX_MODE_NORMAL:
-//     default:
-//         gfx->numSprites = MAX_BATTLERS_COUNT;
-//         gfx->numSprites2 = MAX_BATTLERS_COUNT;
-//         gfx->numFrames = GFX_MANAGER_NUM_FRAMES;
-//         gfx->dataSize = 1;
-//         gfx->mode = MON_SPR_GFX_MODE_NORMAL;
-//         break;
-//     }
-
-//     // Set up sprite / sprite pointer buffers
-//     gfx->spriteBuffer = AllocZeroed(gfx->dataSize * GFX_MANAGER_SPR_SIZE * gfx->numSprites);
-//     gfx->spritePointers = AllocZeroed(gfx->numSprites * 32); // ? Only * 4 is necessary, perhaps they were thinking bits.
-//     if (gfx->spriteBuffer == NULL || gfx->spritePointers == NULL)
-//     {
-//         failureFlags |= ALLOC_FAIL_BUFFER;
-//     }
-//     else
-//     {
-//         for (i = 0; i < gfx->numSprites; i++)
-//             gfx->spritePointers[i] = gfx->spriteBuffer + (gfx->dataSize * GFX_MANAGER_SPR_SIZE * i);
-//     }
-
-//     // Set up sprite structs
-//     gfx->templates = AllocZeroed(sizeof(struct SpriteTemplate) * gfx->numSprites);
-//     gfx->frameImages = AllocZeroed(sizeof(struct SpriteFrameImage) * gfx->numSprites * gfx->numFrames);
-//     if (gfx->templates == NULL || gfx->frameImages == NULL)
-//     {
-//         failureFlags |= ALLOC_FAIL_STRUCT;
-//     }
-//     else
-//     {
-//         for (i = 0; i < gfx->numFrames * gfx->numSprites; i++)
-//             gfx->frameImages[i].size = MON_PIC_SIZE;
-
-//         switch (gfx->mode)
-//         {
-//         case MON_SPR_GFX_MODE_FULL_PARTY:
-//             InitMonSpritesGfx_FullParty(gfx);
-//             break;
-//         case MON_SPR_GFX_MODE_NORMAL:
-//         case MON_SPR_GFX_MODE_BATTLE:
-//         default:
-//             InitMonSpritesGfx_Battle(gfx);
-//             break;
-//         }
-//     }
-
-//     // If either of the allocations failed free their respective members
-//     if (failureFlags & ALLOC_FAIL_STRUCT)
-//     {
-//         TRY_FREE_AND_SET_NULL(gfx->frameImages);
-//         TRY_FREE_AND_SET_NULL(gfx->templates);
-//     }
-//     if (failureFlags & ALLOC_FAIL_BUFFER)
-//     {
-//         TRY_FREE_AND_SET_NULL(gfx->spritePointers);
-//         TRY_FREE_AND_SET_NULL(gfx->spriteBuffer);
-//     }
-
-//     if (failureFlags)
-//     {
-//         // Clear, something failed to allocate
-//         memset(gfx, 0, sizeof(*gfx));
-//         Free(gfx);
-//     }
-//     else
-//     {
-//         gfx->active = GFX_MANAGER_ACTIVE;
-//         sMonSpritesGfxManagers[managerId] = gfx;
-//     }
-
-//     return sMonSpritesGfxManagers[managerId];
-// }
-struct MonSpritesGfxManager *CreateMonSpritesGfxManager(void)
+struct MonSpritesGfxManager *CreateMonSpritesGfxManager(u8 managerId, u8 mode)
 {
-    u32 i;
+    u8 i;
     u8 failureFlags;
     struct MonSpritesGfxManager *gfx;
- 
+
     failureFlags = 0;
+    managerId %= MON_SPR_GFX_MANAGERS_COUNT;
     gfx = AllocZeroed(sizeof(*gfx));
     if (gfx == NULL)
         return NULL;
- 
-    gfx->numSprites = MAX_BATTLERS_COUNT;
-    gfx->numFrames = GFX_MANAGER_NUM_FRAMES;
-    gfx->spriteBuffer = AllocZeroed(GFX_MANAGER_SPR_SIZE * gfx->numSprites);
-    gfx->spritePointers = AllocZeroed(gfx->numSprites * 4);
+
+    switch (mode)
+    {
+    case MON_SPR_GFX_MODE_FULL_PARTY:
+        gfx->numSprites = PARTY_SIZE + 1;
+        gfx->numSprites2 = PARTY_SIZE + 1;
+        gfx->numFrames = GFX_MANAGER_NUM_FRAMES;
+        gfx->dataSize = 1;
+        gfx->mode = MON_SPR_GFX_MODE_FULL_PARTY;
+        break;
+ // case MON_SPR_GFX_MODE_BATTLE:       
+    case MON_SPR_GFX_MODE_NORMAL:
+    default:
+        gfx->numSprites = MAX_BATTLERS_COUNT;
+        gfx->numSprites2 = MAX_BATTLERS_COUNT;
+        gfx->numFrames = GFX_MANAGER_NUM_FRAMES;
+        gfx->dataSize = 1;
+        gfx->mode = MON_SPR_GFX_MODE_NORMAL;
+        break;
+    }
+
+    // Set up sprite / sprite pointer buffers
+    gfx->spriteBuffer = AllocZeroed(gfx->dataSize * GFX_MANAGER_SPR_SIZE * gfx->numSprites);
+    gfx->spritePointers = AllocZeroed(gfx->numSprites * 32); // ? Only * 4 is necessary, perhaps they were thinking bits.
     if (gfx->spriteBuffer == NULL || gfx->spritePointers == NULL)
     {
         failureFlags |= ALLOC_FAIL_BUFFER;
@@ -7136,9 +6998,9 @@ struct MonSpritesGfxManager *CreateMonSpritesGfxManager(void)
     else
     {
         for (i = 0; i < gfx->numSprites; i++)
-            gfx->spritePointers[i] = gfx->spriteBuffer + (GFX_MANAGER_SPR_SIZE * i);
+            gfx->spritePointers[i] = gfx->spriteBuffer + (gfx->dataSize * GFX_MANAGER_SPR_SIZE * i);
     }
- 
+
     // Set up sprite structs
     gfx->templates = AllocZeroed(sizeof(struct SpriteTemplate) * gfx->numSprites);
     gfx->frameImages = AllocZeroed(sizeof(struct SpriteFrameImage) * gfx->numSprites * gfx->numFrames);
@@ -7150,9 +7012,20 @@ struct MonSpritesGfxManager *CreateMonSpritesGfxManager(void)
     {
         for (i = 0; i < gfx->numFrames * gfx->numSprites; i++)
             gfx->frameImages[i].size = MON_PIC_SIZE;
-        InitMonSpritesGfx_Battle(gfx);
+
+        switch (gfx->mode)
+        {
+        case MON_SPR_GFX_MODE_FULL_PARTY:
+            InitMonSpritesGfx_FullParty(gfx);
+            break;
+        case MON_SPR_GFX_MODE_NORMAL:
+        case MON_SPR_GFX_MODE_BATTLE:
+        default:
+            InitMonSpritesGfx_Battle(gfx);
+            break;
+        }
     }
- 
+
     // If either of the allocations failed free their respective members
     if (failureFlags & ALLOC_FAIL_STRUCT)
     {
@@ -7164,7 +7037,7 @@ struct MonSpritesGfxManager *CreateMonSpritesGfxManager(void)
         TRY_FREE_AND_SET_NULL(gfx->spritePointers);
         TRY_FREE_AND_SET_NULL(gfx->spriteBuffer);
     }
- 
+
     if (failureFlags)
     {
         // Clear, something failed to allocate
@@ -7173,37 +7046,27 @@ struct MonSpritesGfxManager *CreateMonSpritesGfxManager(void)
     }
     else
     {
-        gfx->active = TRUE;
-        sMonSpritesGfxManager = gfx;
+        gfx->active = GFX_MANAGER_ACTIVE;
+        sMonSpritesGfxManagers[managerId] = gfx;
     }
- 
-    return sMonSpritesGfxManager;
+
+    return sMonSpritesGfxManagers[managerId];
 }
 
-void DestroyMonSpritesGfxManager(void)
+void DestroyMonSpritesGfxManager(u8 managerId)
 {
-    // struct MonSpritesGfxManager *gfx;
-    struct MonSpritesGfxManager *gfx = sMonSpritesGfxManager;
+    struct MonSpritesGfxManager *gfx;
 
-    // managerId %= MON_SPR_GFX_MANAGERS_COUNT;
-    // gfx = sMonSpritesGfxManagers[managerId];
+    managerId %= MON_SPR_GFX_MANAGERS_COUNT;
+    gfx = sMonSpritesGfxManagers[managerId];
     if (gfx == NULL)
         return;
 
-    // if (gfx->active != GFX_MANAGER_ACTIVE)
-    // {
-    //     memset(gfx, 0, sizeof(*gfx));
-    // }
-    // else
-    // {
-    //     TRY_FREE_AND_SET_NULL(gfx->frameImages);
-    //     TRY_FREE_AND_SET_NULL(gfx->templates);
-    //     TRY_FREE_AND_SET_NULL(gfx->spritePointers);
-    //     TRY_FREE_AND_SET_NULL(gfx->spriteBuffer);
-    //     memset(gfx, 0, sizeof(*gfx));
-    //     Free(gfx);
-    // }
-    if (gfx->active)
+    if (gfx->active != GFX_MANAGER_ACTIVE)
+    {
+        memset(gfx, 0, sizeof(*gfx));
+    }
+    else
     {
         TRY_FREE_AND_SET_NULL(gfx->frameImages);
         TRY_FREE_AND_SET_NULL(gfx->templates);
@@ -7212,31 +7075,20 @@ void DestroyMonSpritesGfxManager(void)
         memset(gfx, 0, sizeof(*gfx));
         Free(gfx);
     }
-    else
-        memset(gfx, 0, sizeof(*gfx));
 }
 
-u8 *MonSpritesGfxManager_GetSpritePtr(u8 spriteNum)
+u8 *MonSpritesGfxManager_GetSpritePtr(u8 managerId, u8 spriteNum)
 {
-    // struct MonSpritesGfxManager *gfx = sMonSpritesGfxManagers[managerId % MON_SPR_GFX_MANAGERS_COUNT];
-    struct MonSpritesGfxManager *gfx = sMonSpritesGfxManager;
-    // if (gfx->active != GFX_MANAGER_ACTIVE)
-    // {
-    //     return NULL;
-    // }
-    // else
-    // {
-    //     if (spriteNum >= gfx->numSprites)
-    //         spriteNum = 0;
-
-    //     return gfx->spritePointers[spriteNum];
-    // }
-    
-    if (gfx->active)
+    struct MonSpritesGfxManager *gfx = sMonSpritesGfxManagers[managerId % MON_SPR_GFX_MANAGERS_COUNT];
+    if (gfx->active != GFX_MANAGER_ACTIVE)
+    {
+        return NULL;
+    }
+    else
     {
         if (spriteNum >= gfx->numSprites)
             spriteNum = 0;
- 
+
         return gfx->spritePointers[spriteNum];
     }
     return NULL;

@@ -1,5 +1,4 @@
-# Pokemon-Green-Rock
-A modification of Pokemon Emerald built using [pret's disassembly][1] of the game.
+# Pokémon Emerald
 
 # Installation instructions:
 
@@ -67,6 +66,29 @@ Changelog:
 -----------------------------------------------------------------
 Thank you to Lunos (change moves and bicycle), GriffinR (map scripts), MeekRhino (map scripts), DizzyEggg (split icons), AkimotoBubble (IVs/EVs), Pyredrid (surfboard), ghoulslash (follower) and many more for their help and guidance in implementation!
 
+<<<<<<< HEAD
 [1]: https://github.com/pret/pokeemerald    "pret/pokeemerald"
 [2]: https://www.smwcentral.net/?p=section&a=details&id=11474 "FLIPS"
 [3]: https://github.com/esong501/Pokemon-Green-Rock/compare/master...ghoulslash:pokeemerald:follow_me "follow me"
+=======
+## See also
+
+Other disassembly and/or decompilation projects:
+* [**Pokémon Red and Blue**](https://github.com/pret/pokered)
+* [**Pokémon Gold and Silver (Space World '97 demo)**](https://github.com/pret/pokegold-spaceworld)
+* [**Pokémon Yellow**](https://github.com/pret/pokeyellow)
+* [**Pokémon Trading Card Game**](https://github.com/pret/poketcg)
+* [**Pokémon Pinball**](https://github.com/pret/pokepinball)
+* [**Pokémon Stadium**](https://github.com/pret/pokestadium)
+* [**Pokémon Gold and Silver**](https://github.com/pret/pokegold)
+* [**Pokémon Crystal**](https://github.com/pret/pokecrystal)
+* [**Pokémon Ruby and Sapphire**](https://github.com/pret/pokeruby)
+* [**Pokémon Pinball: Ruby & Sapphire**](https://github.com/pret/pokepinballrs)
+* [**Pokémon FireRed and LeafGreen**](https://github.com/pret/pokefirered)
+* [**Pokémon Mystery Dungeon: Red Rescue Team**](https://github.com/pret/pmd-red)
+
+
+## Contacts
+
+You can find us on [Discord](https://discord.gg/d5dubZ3) and [IRC](https://web.libera.chat/?#pret).
+>>>>>>> e5a297ddf60df22dcb1cd3428299630784d18444

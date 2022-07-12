@@ -945,11 +945,6 @@ static void Task_BuyMenu(u8 taskId)
             {
                 BuyMenuDisplayMessage(taskId, gText_YouDontHaveMoney, BuyMenuReturnToItemList);
             }
-            // we'll add another buying restriction for when the player has that TM
-            else if (ItemId_GetPocket(itemId) == POCKET_TM_HM && CheckBagHasItem(itemId, 1))
-            {
-                BuyMenuDisplayMessage(taskId, gText_YouAlreadyHaveThis, BuyMenuReturnToItemList);
-            }
             else
             {
                 if (sMartInfo.martType == MART_TYPE_NORMAL)

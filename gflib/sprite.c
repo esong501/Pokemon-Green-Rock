@@ -103,9 +103,9 @@ typedef void (*AffineAnimCmdFunc)(u8 matrixNum, struct Sprite *);
 #define DUMMY_OAM_DATA                      \
 {                                           \
     .y = DISPLAY_HEIGHT,                    \
-    .affineMode = 0,                        \
+    .affineMode = ST_OAM_AFFINE_OFF,        \
     .objMode = 0,                           \
-    .mosaic = 0,                            \
+    .mosaic = FALSE,                        \
     .bpp = 0,                               \
     .shape = SPRITE_SHAPE(8x8),             \
     .x = DISPLAY_WIDTH + 64,                \

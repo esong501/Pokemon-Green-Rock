@@ -388,7 +388,7 @@ static const struct OamData sOam_SliderHeart =
     .y = 0,
     .affineMode = ST_OAM_AFFINE_OFF,
     .objMode = ST_OAM_OBJ_NORMAL,
-    .mosaic = 0,
+    .mosaic = FALSE,
     .bpp = ST_OAM_4BPP,
     .shape = SPRITE_SHAPE(8x8),
     .x = 0,
@@ -473,7 +473,7 @@ static const struct OamData sOam_NextTurn =
     .y = 0,
     .affineMode = ST_OAM_AFFINE_OFF,
     .objMode = ST_OAM_OBJ_NORMAL,
-    .mosaic = 0,
+    .mosaic = FALSE,
     .bpp = ST_OAM_4BPP,
     .shape = SPRITE_SHAPE(32x8),
     .x = 0,
@@ -2753,8 +2753,8 @@ static void Task_ContestReturnToField(u8 taskId)
 
 static void FieldCB_ContestReturnToField(void)
 {
-    ScriptContext2_Disable();
-    EnableBothScriptContexts();
+    UnlockPlayerFieldControls();
+    ScriptContext_Enable();
 }
 
 static void TryPutPlayerLast(void)

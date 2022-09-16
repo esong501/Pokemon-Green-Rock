@@ -563,7 +563,7 @@ static void AddDecorationActionsWindow(void)
 static void InitDecorationActionsWindow(void)
 {
     sDecorationActionsCursorPos = 0;
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     AddDecorationActionsWindow();
     PrintCurMainMenuDescription();
 }
@@ -615,7 +615,7 @@ static void HandleDecorationActionsMenuInput(u8 taskId)
 static void PrintCurMainMenuDescription(void)
 {
     FillWindowPixelBuffer(0, PIXEL_FILL(1));
-    AddTextPrinterParameterized2(0, FONT_NORMAL, sSecretBasePCMenuItemDescriptions[sDecorationActionsCursorPos], 0, 0, 2, 1, 3);
+    AddTextPrinterParameterized2(0, FONT_NORMAL, sSecretBasePCMenuItemDescriptions[sDecorationActionsCursorPos], 0, 0, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
 }
 
 static void DecorationMenuAction_Decorate(u8 taskId)
@@ -670,7 +670,7 @@ static void DecorationMenuAction_Cancel(u8 taskId)
     RemoveDecorationWindow(WINDOW_MAIN_MENU);
     if (!sDecorationContext.isPlayerRoom)
     {
-        ScriptContext1_SetupScript(SecretBase_EventScript_PCCancel);
+        ScriptContext_SetupScript(SecretBase_EventScript_PCCancel);
         DestroyTask(taskId);
     }
     else
@@ -1211,7 +1211,7 @@ static void ShowDecorationOnMap_(u16 mapX, u16 mapY, u8 decWidth, u8 decHeight, 
         {
             x = mapX + i;
             attributes = GetMetatileAttributesById(NUM_TILES_IN_PRIMARY + gDecorations[decoration].tiles[j * decWidth + i]);
-            if (MetatileBehavior_IsSecretBaseImpassable(attributes & METATILE_ATTR_BEHAVIOR_MASK) == TRUE 
+            if (MetatileBehavior_IsSecretBaseImpassable(attributes & METATILE_ATTR_BEHAVIOR_MASK) == TRUE
              || (gDecorations[decoration].permission != DECORPERM_PASS_FLOOR && (attributes >> METATILE_ATTR_LAYER_SHIFT) != METATILE_LAYER_TYPE_NORMAL))
                 impassableFlag = MAPGRID_COLLISION_MASK;
             else
@@ -1482,7 +1482,7 @@ static bool8 IsSecretBaseTrainerSpot(u8 behaviorAt, u16 layerType)
 // Can't place decoration where the player was standing when they interacted with the PC
 static bool8 IsntInitialPosition(u8 taskId, s16 x, s16 y, u16 layerType)
 {
-    if (x == gTasks[taskId].tInitialX + MAP_OFFSET 
+    if (x == gTasks[taskId].tInitialX + MAP_OFFSET
      && y == gTasks[taskId].tInitialY + MAP_OFFSET
      && layerType != METATILE_LAYER_TYPE_NORMAL)
         return FALSE;
@@ -1650,7 +1650,7 @@ static void PlaceDecoration(u8 taskId)
     {
         sCurDecorMapX = gTasks[taskId].tCursorX - MAP_OFFSET;
         sCurDecorMapY = gTasks[taskId].tCursorY - MAP_OFFSET;
-        ScriptContext1_SetupScript(SecretBase_EventScript_SetDecoration);
+        ScriptContext_SetupScript(SecretBase_EventScript_SetDecoration);
     }
 
     gSprites[sDecor_CameraSpriteObjectIdx1].y += 2;
@@ -1722,7 +1722,7 @@ static void c1_overworld_prev_quest(u8 taskId)
     switch (gTasks[taskId].tState)
     {
     case 0:
-        ScriptContext2_Enable();
+        LockPlayerFieldControls();
         if (!gPaletteFade.active)
         {
             WarpToInitialPosition(taskId);
@@ -1749,11 +1749,11 @@ static void Task_InitDecorationItemsWindow(u8 taskId)
         tState++;
         break;
     case 1:
-        ScriptContext1_SetupScript(SecretBase_EventScript_InitDecorations);
+        ScriptContext_SetupScript(SecretBase_EventScript_InitDecorations);
         tState++;
         break;
     case 2:
-        ScriptContext2_Enable();
+        LockPlayerFieldControls();
         tState++;
         break;
     case 3:
@@ -1767,7 +1767,7 @@ static void FieldCB_InitDecorationItemsWindow(void)
 {
     u8 taskId;
 
-    ScriptContext2_Enable();
+    LockPlayerFieldControls();
     FadeInFromBlack();
     taskId = CreateTask(Task_InitDecorationItemsWindow, 8);
     AddDecorationItemsWindow(taskId);
@@ -1985,7 +1985,7 @@ static void SetDecorSelectionBoxOamAttributes(u8 decorShape)
     sDecorSelectorOam.y = 0;
     sDecorSelectorOam.affineMode = ST_OAM_AFFINE_OFF;
     sDecorSelectorOam.objMode = ST_OAM_OBJ_NORMAL;
-    sDecorSelectorOam.mosaic = 0;
+    sDecorSelectorOam.mosaic = FALSE;
     sDecorSelectorOam.bpp = ST_OAM_4BPP;
     sDecorSelectorOam.shape = sDecorationMovementInfo[decorShape].shape;
     sDecorSelectorOam.x = 0;
@@ -2246,13 +2246,13 @@ static void Task_PutAwayDecoration(u8 taskId)
     case 1:
         if (!gPaletteFade.active) {
             DrawWholeMapView();
-            ScriptContext1_SetupScript(SecretBase_EventScript_PutAwayDecoration);
+            ScriptContext_SetupScript(SecretBase_EventScript_PutAwayDecoration);
             ClearDialogWindowAndFrame(0, TRUE);
             gTasks[taskId].tState = 2;
         }
         break;
     case 2:
-        ScriptContext2_Enable();
+        LockPlayerFieldControls();
         IdentifyOwnedDecorationsCurrentlyInUseInternal(taskId);
         FadeInFromBlack();
         gTasks[taskId].tState = 3;
@@ -2645,11 +2645,11 @@ static void Task_ReinitializeDecorationMenuHandler(u8 taskId)
         tState++;
         break;
     case 1:
-        ScriptContext1_SetupScript(SecretBase_EventScript_InitDecorations);
+        ScriptContext_SetupScript(SecretBase_EventScript_InitDecorations);
         tState++;
         break;
     case 2:
-        ScriptContext2_Enable();
+        LockPlayerFieldControls();
         tState++;
         break;
     case 3:
